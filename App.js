@@ -1,6 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
-import LogInScreen from './app/screens/LogInScreen.js';
+import React, {useEffect, useState}  from 'react';
+import LogInScreen from './app/screens/LogInScreen';
 
 export default function App() {
   return <LogInScreen />;
