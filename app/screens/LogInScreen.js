@@ -1,50 +1,47 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, ImageBackground, TouchableOpacity, Alert, Image } from 'react-native';
+import * as React from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 
-function LogInScreen(props) {
 
-  const [email, setEmail] = React.useState("");
 
-const getEmailFromEmployeeTable = async () => {
-    try{
-      console.warn('B4fetch')
-      console.warn(email)
-      let response= await fetch (`https://rocketrestapi.azurewebsites.net/api/Employee/Email/${email}`,{
-         method:'GET'
-       });
-      let json = await response.json();
-      //console.warn(json['email'])
-      if (json['title'] == "Not Found"){
-        Alert.alert("Verify Your Email Address")
-      } else {
-              navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'ElevatorsListScreen' }],    
-              })
-        Alert.alert("Welcome " + json['firstName'])
-      }
-    } catch (error) {
-        console.error(error);
+
+const LogInScreen = ({ navigation }) => {
+
+    const [email, setEmail] = React.useState("");
+
+    const findEmployeeEmail = async () => {
+        try{
+            let response= await fetch (`https://rocketelevators-em.azurewebsites.net/api/Employee/Email/${email}`,{
+                method:'GET'
+            });
+            let json = await response.json();
+            if (response['status'] != "200") {
+                Alert.alert("This is not a valid email")
+            } else {
+                navigation.navigate('Home')
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
-  }
 
-  return (
-    <View style={styles.container}>
-            <Image style={styles.logo} source={require('../assets/R2.png')}/>
-            <View style={styles.inputView} >
-            <TextInput
-            placeholder= "email"
-            autoCapitalize='none'
-            style={styles.inputText}
-            onChangeText={(email) => setEmail(email)}
-            value={email}/></View>
-            <TouchableOpacity style={styles.loginBtn} onPress={getEmailFromEmployeeTable}>
-                <Text style={styles.loginText}>LOGIN</Text>
-            </TouchableOpacity>
-        <StatusBar style="auto" />
-    </View>
-);
+    return (
+        <View style={styles.container}>
+                <Image style={styles.logo} source={require('../assets/R2.png')}/>
+                <View style={styles.inputView} >
+                <TextInput
+                placeholder= "email"
+                autoCapitalize='none'
+                style={styles.inputText}
+                onChangeText={(email) => setEmail(email)}
+                value={email}/></View>
+                <TouchableOpacity style={styles.loginBtn} onPress={findEmployeeEmail}>
+                    <Text style={styles.loginText}>LOGIN</Text>
+                </TouchableOpacity>
+            <StatusBar style="auto" />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
