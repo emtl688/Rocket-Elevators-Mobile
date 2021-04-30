@@ -8,12 +8,12 @@ export default class HomePage extends React.Component {
 			elevatorsList: []
 		};
 
-		this.goToStatusScreen = this.goToStatusScreen.bind(this);
+		this.elevatorStatusView = this.elevatorStatusView.bind(this);
 	}
 	async componentDidMount() {
 		try {
 			const elevators = await fetch(
-				'https://rocketelevators-em.azurewebsites.net/api/elevator/non-operational'
+				'https://rocketelevators-em.azurewebsites.net/api/elevator'
 			);
 			const data = await elevators.json();
 			this.setElevators(data);
@@ -28,14 +28,14 @@ export default class HomePage extends React.Component {
 		});
 	}
 
-	goToStatusScreen = elevator => {
+	elevatorStatusView = elevator => {
 		const { navigation } = this.props;
-		navigation.navigate('Status', { elevator: elevator });
+		navigation.navigate('Status', { elevatorData: elevator });
 	};
 
-	return = elevator => {
+	logout = () => {
 		const { navigation } = this.props;
-		navigation.navigate('Login', { elevator: elevator });
+		navigation.navigate('Login');
 	};
 
 	render() {
@@ -46,7 +46,7 @@ export default class HomePage extends React.Component {
 					<Text>Serial Number: {elevator.serialNumber}</Text>
 					<Text>Status: {elevator.status}</Text>
 						<Button
-						onPress={() => this.goToStatusScreen(elevator)}
+						onPress={() => this.elevatorStatusView(elevator)}
 						title={elevator.status}
 					/>
 				</View>
@@ -57,7 +57,7 @@ export default class HomePage extends React.Component {
 			<ScrollView>
 				<View style={styles.container}>
 					{listViews}
-					<TouchableOpacity style={styles.buttonContainer} onPress={() => this.return()}>
+					<TouchableOpacity style={styles.buttonContainer} onPress={() => this.logout()}>
 						<Text style={styles.buttonText}>LOG OUT</Text>
 					</TouchableOpacity>
 				</View>
