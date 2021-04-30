@@ -9,22 +9,30 @@ export default class HomePage extends React.Component {
 		};
 		this.elevatorStatusView = this.elevatorStatusView.bind(this);
 	}
-	async componentDidMount() {
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.route.params.refresh) this.fetchData()
+	}
+
+	componentDidMount() {
+		this.fetchData();
+	}
+
+	fetchData = async () => {
 		try {
 			const elevators = await fetch(
-				'https://rocketelevators-em.azurewebsites.net/api/elevator'
+				'https://rocketelevators-em.azurewebsites.net/api/elevator/non-operational'
 			);
 			const data = await elevators.json();
-			this.setElevators(data);
+			this.setState({
+				elevatorsList: data
+			});
 		} catch {
 			console.log;
 		}
-	}
-	setElevators(data) {
-		this.setState({
-			elevatorsList: data
-		});
-	}
+	};
+
+	
 	elevatorStatusView = elevator => {
 		const { navigation } = this.props;
 		navigation.navigate('Status', { elevatorData: elevator });
@@ -33,6 +41,7 @@ export default class HomePage extends React.Component {
 		const { navigation } = this.props;
 		navigation.navigate('Login');
 	};
+
 	render() {
 		const listViews = this.state.elevatorsList.map((elevator, key) => {
 			return (
@@ -41,7 +50,6 @@ export default class HomePage extends React.Component {
 					<Text>Serial Number: {elevator.serialNumber}</Text>
 					<Text>Status: {elevator.status}</Text>
 						<Button
-            // Passing the elevator object to the MyElevator constant that we access from the status screen
 						onPress={() => this.props.navigation.navigate('Status', { MyElevator: elevator })}
 						title={elevator.status}
 					/>

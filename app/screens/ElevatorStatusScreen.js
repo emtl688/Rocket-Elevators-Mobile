@@ -1,31 +1,56 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
-// For now we set the class to HomePage to acces the route.params
+import { StyleSheet, View, Text, Button, Alert, TouchableOpacity } from 'react-native';
+
 export default class HomePage extends React.Component {
 	constructor(props) {
 		super(props);
-    // In the HomeScreen, we pass the elevator object to the MyElevator constant here
     const { MyElevator } = this.props.route.params;
-    // We can access whatever we want from the MyElevator constant here such as id, serialNumber...
     this.state = {
       id: MyElevator.id,
       serialNumber: MyElevator.serialNumber,
       status: MyElevator.status
     };
 	}
+
+
     render() {
 		const { navigation } = this.props;
+        console.log("refresh");
 		return (
 			<View style={styles.container}>
 				<Text style={styles.statusHeader}>CHANGE ELEVATOR STATUS: </Text>
 				<Text style={styles.statusInfo}>Elevator ID: {this.state.id}</Text>
                 <Text style={styles.statusInfo}>Serial Number: {this.state.serialNumber}</Text>
-                <Text style={styles.statusInfo}>Current Status: {this.state.status}</Text>
-				<Button style={styles.statusInfo} title="< Back" onPress={() => navigation.navigate('Home')} />
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.activeStatus()}>
+                    <Text>STATUS: {this.state.status}</Text>
+                </TouchableOpacity>
+				<Button style={styles.statusInfo} title="< Back" onPress={() => navigation.navigate('Home', {refresh: true})} />
 			</View>
 		);
 	}
+
+    activeStatus = async () => {
+		const id = this.state.id;
+		var res = await fetch (
+			`https://rocketelevators-em.azurewebsites.net/api/elevator/${id}?status=Active`,
+			{ method: 'PUT' }
+		)
+			.then(res => {
+                const result = res.json;
+				this.setState({ status: result.status });
+				this.changeStatus();
+                Alert.alert('Elevator ID : ' + `${id}` + ' Status Changed To : Active');
+			});
+	};
+
+    changeStatus = () => {
+		this.setState({
+				status: 'Active',
+		});
+	};
 }
+
+
 const styles = StyleSheet.create({
 	container: {
 		textAlign: 'center',
