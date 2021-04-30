@@ -17,7 +17,7 @@ const LogInScreen = ({ navigation }) => {
             });
             let json = await response.json();
             if (response['status'] != "200") {
-                Alert.alert("This is not a valid email")
+                Alert.alert("Please Enter A Valid Email")
             } else {
                 navigation.navigate('Home')
             }
