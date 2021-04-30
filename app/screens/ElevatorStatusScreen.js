@@ -1,31 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
-
-export default class ElevatorStatus extends React.Component {
+// For now we set the class to HomePage to acces the route.params
+export default class HomePage extends React.Component {
 	constructor(props) {
 		super(props);
-
-        const {elevatorData} = this.props.route.params;
-
-		this.state = {
-			elevator: this.props.navigation.getParam('elevator'),
-		};
+    // In the HomeScreen, we pass the elevator object to the MyElevator constant here
+    const { MyElevator } = this.props.route.params;
+    // We can access whatever we want from the MyElevator constant here such as id, serialNumber...
+    this.state = {
+      id: MyElevator.id,
+      serialNumber: MyElevator.serialNumber,
+      status: MyElevator.status
+    };
 	}
-
     render() {
 		const { navigation } = this.props;
 		return (
 			<View style={styles.container}>
-				<Text>CHANGE ELEVATOR STATUS: </Text>
-				<Text>Elevator ID: {this.state.elevator.id}</Text>
-                <Text>Serial Number: {this.state.serialNumber}</Text>
-                <Text>Status: {this.state.status}</Text>
-				<Button title="< Back" onPress={() => navigation.navigate('Home')} />
+				<Text style={styles.statusHeader}>CHANGE ELEVATOR STATUS: </Text>
+				<Text style={styles.statusInfo}>Elevator ID: {this.state.id}</Text>
+                <Text style={styles.statusInfo}>Serial Number: {this.state.serialNumber}</Text>
+                <Text style={styles.statusInfo}>Current Status: {this.state.status}</Text>
+				<Button style={styles.statusInfo} title="< Back" onPress={() => navigation.navigate('Home')} />
 			</View>
 		);
 	}
 }
-
 const styles = StyleSheet.create({
 	container: {
 		textAlign: 'center',
@@ -39,45 +39,12 @@ const styles = StyleSheet.create({
 		margin: 20,
 		backgroundColor: 'red',
 	},
+    statusInfo: {
+        padding: 10
+    },
+    statusHeader: {
+        padding: 10,
+        fontWeight: 'bold'
+    }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-import 'react-native-gesture-handler';
-import React from 'react';
-
-function ElevatorStatusScreen(props) {
-    return (
-        <div>
-            <h1>TEST STATUS NAV</h1>
-        </div>
-    );
-}
-
-export default ElevatorStatusScreen;
-*/
 

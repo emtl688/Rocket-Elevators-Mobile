@@ -7,7 +7,6 @@ export default class HomePage extends React.Component {
 		this.state = {
 			elevatorsList: []
 		};
-
 		this.elevatorStatusView = this.elevatorStatusView.bind(this);
 	}
 	async componentDidMount() {
@@ -21,23 +20,19 @@ export default class HomePage extends React.Component {
 			console.log;
 		}
 	}
-
 	setElevators(data) {
 		this.setState({
 			elevatorsList: data
 		});
 	}
-
 	elevatorStatusView = elevator => {
 		const { navigation } = this.props;
 		navigation.navigate('Status', { elevatorData: elevator });
 	};
-
 	logout = () => {
 		const { navigation } = this.props;
 		navigation.navigate('Login');
 	};
-
 	render() {
 		const listViews = this.state.elevatorsList.map((elevator, key) => {
 			return (
@@ -46,13 +41,13 @@ export default class HomePage extends React.Component {
 					<Text>Serial Number: {elevator.serialNumber}</Text>
 					<Text>Status: {elevator.status}</Text>
 						<Button
-						onPress={() => this.elevatorStatusView(elevator)}
+            // Passing the elevator object to the MyElevator constant that we access from the status screen
+						onPress={() => this.props.navigation.navigate('Status', { MyElevator: elevator })}
 						title={elevator.status}
 					/>
 				</View>
 			);
 		});
-
 		return (
 			<ScrollView>
 				<View style={styles.container}>
@@ -65,7 +60,6 @@ export default class HomePage extends React.Component {
 		);
 	}
 }
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
