@@ -22,7 +22,7 @@ export default class HomePage extends React.Component {
 				<Text style={styles.statusInfo}>Elevator ID: {this.state.id}</Text>
                 <Text style={styles.statusInfo}>Serial Number: {this.state.serialNumber}</Text>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.activeStatus()}>
-                    <Text>STATUS: {this.state.status}</Text>
+                    <Text>CURRENT STATUS: {this.state.status}</Text>
                 </TouchableOpacity>
 				<Button style={styles.statusInfo} title="< Back" onPress={() => navigation.navigate('Home', {refresh: true})} />
 			</View>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 	buttonContainer: {
 		paddingVertical: 10,
 		margin: 20,
-		backgroundColor: 'red',
+		backgroundColor: '#DC143C'
 	},
     statusInfo: {
         padding: 10
